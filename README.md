@@ -10,8 +10,11 @@
 
 # TODO
 
--[_] Support condition or list of values
+-[x] Support condition or list of values
 -[_] Fix the literals problem
 -[x] Add full list of css properties
 -[_] Define any other kinds of checks
 -[_] Create output object
+-[_] Double Values
+-[_] Multiple Values
+-[_] Custom Regex

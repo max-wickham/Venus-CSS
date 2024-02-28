@@ -1,11 +1,12 @@
 mod casandra;
 // mod css_rules;
-use css_rules::{assert_valid_color, assert_valid_dimensions, assert_valid_length, check_string_in_list};
+use css_rules::{
+    assert_valid_color, assert_valid_dimensions, assert_valid_length, assert_valid_number, assert_valid_border,
+    check_string_in_list,
+};
 // use casandra::style_sheet;
 use std::collections::HashMap;
 extern crate proc_macro;
-
-
 
 macro_rules! css_key {
     (accent_color, $dict:expr, $value:expr) => {
@@ -103,47 +104,59 @@ macro_rules! css_key {
         )
     };
     (azimuth, $dict:expr, $value:expr) => {
+        assert_valid_number!($value,{});
         $dict.insert(String::from("azimuth"), ($value).to_string().clone())
     };
     (backface_visibility, $dict:expr, $value:expr) => {
+        check_string_in_list!($value, {"visible","hidden"});
         $dict.insert(
             String::from("backface-visibility"),
             ($value).to_string().clone(),
         )
     };
+    // TODO
     (background, $dict:expr, $value:expr) => {
         $dict.insert(String::from("background"), ($value).to_string().clone())
     };
     (background_attachment, $dict:expr, $value:expr) => {
+        check_string_in_list!($value, {"scroll","fixed","local","initial","inherit"});
         $dict.insert(
             String::from("background-attachment"),
             ($value).to_string().clone(),
         )
     };
     (background_clip, $dict:expr, $value:expr) => {
+        // TODO change to accept multiple values
+        check_string_in_list!($value, {"border-box","padding-box","content-box","initial","inherit"});
         $dict.insert(
             String::from("background-clip"),
             ($value).to_string().clone(),
         )
     };
     (background_color, $dict:expr, $value:expr) => {
+        assert_valid_color!($value, {"transparent","initial","inherit"});
         $dict.insert(
             String::from("background-color"),
             ($value).to_string().clone(),
         )
     };
+    // TODO
     (background_image, $dict:expr, $value:expr) => {
         $dict.insert(
             String::from("background-image"),
             ($value).to_string().clone(),
         )
     };
+    //
     (background_origin, $dict:expr, $value:expr) => {
+        // TODO change to accept multiple values
+        check_string_in_list!($value, {"border-box","padding-box","content-box","initial","inherit"});
         $dict.insert(
             String::from("background-origin"),
             ($value).to_string().clone(),
         )
     };
+    // TODO (double values)
     (background_position, $dict:expr, $value:expr) => {
         $dict.insert(
             String::from("background-position"),
@@ -151,11 +164,14 @@ macro_rules! css_key {
         )
     };
     (background_repeat, $dict:expr, $value:expr) => {
+        // TODO change to accept multiple values
+        check_string_in_list!($value, {"repeat","repeat-x","repeat-y","no-repeat","space","round","initial","inherit"});
         $dict.insert(
             String::from("background-repeat"),
             ($value).to_string().clone(),
         )
     };
+    // TODO (double values)
     (background_size, $dict:expr, $value:expr) => {
         $dict.insert(
             String::from("background-size"),
@@ -163,144 +179,178 @@ macro_rules! css_key {
         )
     };
     (background_blend_mode, $dict:expr, $value:expr) => {
+        check_string_in_list!($value, {"normal","multiply","screen","overlay","darken","lighten","color-dodge","saturation","color","luminosity"});
         $dict.insert(
             String::from("background-blend-mode"),
             ($value).to_string().clone(),
         )
     };
+    // TODO
     (baseline_shift, $dict:expr, $value:expr) => {
         $dict.insert(String::from("baseline-shift"), ($value).to_string().clone())
     };
     (bleed, $dict:expr, $value:expr) => {
+        assert_valid_length!($value, "auto");
         $dict.insert(String::from("bleed"), ($value).to_string().clone())
     };
     (bookmark_label, $dict:expr, $value:expr) => {
+        // Just a string
         $dict.insert(String::from("bookmark-label"), ($value).to_string().clone())
     };
     (bookmark_level, $dict:expr, $value:expr) => {
+        // TODO check integer
         $dict.insert(String::from("bookmark-level"), ($value).to_string().clone())
     };
     (bookmark_state, $dict:expr, $value:expr) => {
+        check_string_in_list!($value, {"open","closed"});
         $dict.insert(String::from("bookmark-state"), ($value).to_string().clone())
     };
     (border, $dict:expr, $value:expr) => {
+        // TODO border style
+        assert_valid_border!($value,{});
         $dict.insert(String::from("border"), ($value).to_string().clone())
     };
+    // TODO
     (border_color, $dict:expr, $value:expr) => {
         $dict.insert(String::from("border-color"), ($value).to_string().clone())
     };
     (border_style, $dict:expr, $value:expr) => {
+        check_string_in_list!($value,{"none","hidden","dotted","dashed","solid","double","groove","ridge","inset","outset","initial","inherit"});
         $dict.insert(String::from("border-style"), ($value).to_string().clone())
     };
     (border_width, $dict:expr, $value:expr) => {
+        // TODO
         $dict.insert(String::from("border-width"), ($value).to_string().clone())
     };
     (border_bottom, $dict:expr, $value:expr) => {
+        assert_valid_border!($value,{});
         $dict.insert(String::from("border-bottom"), ($value).to_string().clone())
     };
+
     (border_bottom_color, $dict:expr, $value:expr) => {
+        assert_valid_color!($value,{"transparent","initial","inherit"});
         $dict.insert(
             String::from("border-bottom-color"),
             ($value).to_string().clone(),
         )
     };
+
     (border_bottom_style, $dict:expr, $value:expr) => {
+        check_string_in_list!($value,{"none","hidden","dotted","dashed","solid","double","groove","ridge","inset","outset","initial","inherit"});
         $dict.insert(
             String::from("border-bottom-style"),
             ($value).to_string().clone(),
         )
     };
     (border_bottom_width, $dict:expr, $value:expr) => {
+        assert_valid_length!($value,{"medium","thin","thick","initial","inherit"});
         $dict.insert(
             String::from("border-bottom-width"),
             ($value).to_string().clone(),
         )
     };
     (border_left, $dict:expr, $value:expr) => {
+        assert_valid_border!($value,{});
         $dict.insert(String::from("border-left"), ($value).to_string().clone())
     };
     (border_left_color, $dict:expr, $value:expr) => {
+        assert_valid_color!($value,{"transparent","initial","inherit"});
         $dict.insert(
             String::from("border-left-color"),
             ($value).to_string().clone(),
         )
     };
     (border_left_style, $dict:expr, $value:expr) => {
+        check_string_in_list!($value,{"none","hidden","dotted","dashed","solid","double","groove","ridge","inset","outset","initial","inherit"});
         $dict.insert(
             String::from("border-left-style"),
             ($value).to_string().clone(),
         )
     };
     (border_left_width, $dict:expr, $value:expr) => {
+        assert_valid_length!($value,{"medium","thin","thick","initial","inherit"});
         $dict.insert(
             String::from("border-left-width"),
             ($value).to_string().clone(),
         )
     };
     (border_right, $dict:expr, $value:expr) => {
+        assert_valid_border!($value,{});
         $dict.insert(String::from("border-right"), ($value).to_string().clone())
     };
     (border_right_color, $dict:expr, $value:expr) => {
+        assert_valid_color!($value,{"transparent","initial","inherit"});
         $dict.insert(
             String::from("border-right-color"),
             ($value).to_string().clone(),
         )
     };
     (border_right_style, $dict:expr, $value:expr) => {
+        check_string_in_list!($value,{"none","hidden","dotted","dashed","solid","double","groove","ridge","inset","outset","initial","inherit"});
         $dict.insert(
             String::from("border-right-style"),
             ($value).to_string().clone(),
         )
     };
     (border_right_width, $dict:expr, $value:expr) => {
+        assert_valid_length!($value,{"medium","thin","thick","initial","inherit"});
         $dict.insert(
             String::from("border-right-width"),
             ($value).to_string().clone(),
         )
     };
     (border_top, $dict:expr, $value:expr) => {
+        assert_valid_border!($value,{});
         $dict.insert(String::from("border-top"), ($value).to_string().clone())
     };
     (border_top_color, $dict:expr, $value:expr) => {
+        assert_valid_color!($value,{"transparent","initial","inherit"});
         $dict.insert(
             String::from("border-top-color"),
             ($value).to_string().clone(),
         )
     };
     (border_top_style, $dict:expr, $value:expr) => {
+        check_string_in_list!($value,{"none","hidden","dotted","dashed","solid","double","groove","ridge","inset","outset","initial","inherit"});
         $dict.insert(
             String::from("border-top-style"),
             ($value).to_string().clone(),
         )
     };
     (border_top_width, $dict:expr, $value:expr) => {
+        assert_valid_length!($value,{"medium","thin","thick","initial","inherit"});
         $dict.insert(
             String::from("border-top-width"),
             ($value).to_string().clone(),
         )
     };
     (border_collapse, $dict:expr, $value:expr) => {
+        check_string_in_list!($value,{"separate","collapse","initial","inherit"});
         $dict.insert(
             String::from("border-collapse"),
             ($value).to_string().clone(),
         )
     };
+    // TODO
     (border_image, $dict:expr, $value:expr) => {
         $dict.insert(String::from("border-image"), ($value).to_string().clone())
     };
     (border_image_outset, $dict:expr, $value:expr) => {
+        assert_valid_length!($value,{"initial","inherit"});
         $dict.insert(
             String::from("border-image-outset"),
             ($value).to_string().clone(),
         )
     };
     (border_image_repeat, $dict:expr, $value:expr) => {
+        check_string_in_list!($value,{"stretch","repeat","round","space","initial","inherit"});
         $dict.insert(
             String::from("border-image-repeat"),
             ($value).to_string().clone(),
         )
     };
     (border_image_slice, $dict:expr, $value:expr) => {
+        // TODO number percentage
         $dict.insert(
             String::from("border-image-slice"),
             ($value).to_string().clone(),
@@ -1641,19 +1691,37 @@ macro_rules! css_key {
     };
 }
 
-macro_rules! css_dict {
+macro_rules! pass_literal_ident {
+    ($key:literal) => { $key };
+    ($key:ident) => { stringify!($key) };
+}
 
-    ($($key:ident : $value:expr),* $(,)?) => {
+macro_rules! create_object {
+    // let mut temp_map: HashMap<String,String> = HashMap::new();
+    ($key:ident, $hashmap:expr, $value:expr) => {
         {
-        let mut temp_map: HashMap<String,String> = HashMap::new();
-        $(
-            css_key!($key, temp_map, $value);
-        )*
-        temp_map
+            css_key!($key, $hashmap, $value);
         }
     };
 
+    ($key:literal : $value:expr) => {
+        {
+            $hashmap:expr.insert($key, $value);
+        }
+    }
+
 }
+
+macro_rules! css_dict {
+    ($($key:tt : $value:expr),* $(,)?)  => {{
+        let mut map = HashMap::new();
+        $(
+            create_object!($key, map, $expr);
+        )*
+        map
+    }};
+}
+
 
 fn main() {
     // let x: i32 = 15;
@@ -1661,6 +1729,7 @@ fn main() {
         color: "black",
         width: "10em 10px 10% 10",
         align_content: "initial",
+        "stsg":"10"
     };
 
     // Display the generated HashMap
