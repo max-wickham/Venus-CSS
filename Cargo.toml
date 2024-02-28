@@ -11,6 +11,9 @@ num-traits = "0.2.18"
 quote = "1.0.35"
 syn = "2.0.50"
 css_rules = { path = "./css_rules" }
+[dependencies.uuid]
+version = "1.7.0"
+features = ["v4", "fast-rng", "macro-diagnostics"]
 
 [lib]
 # proc-macro = true
