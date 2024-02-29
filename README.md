@@ -11,10 +11,12 @@
 # TODO
 
 -[x] Support condition or list of values
--[_] Fix the literals problem
+-[x] Fix the literals problem
 -[x] Add full list of css properties
+-[x] Create output object
+-[_] Create dioxus support
+
 -[_] Define any other kinds of checks
--[_] Create output object
 -[_] Double Values
 -[_] Multiple Values
 -[_] Custom Regex

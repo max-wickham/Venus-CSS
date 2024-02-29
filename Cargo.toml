@@ -1,6 +1,6 @@
 workspace = { members = ["css_rules"] }
 [package]
-name = "dioxuscss"
+name = "venus-css"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,6 +11,8 @@ num-traits = "0.2.18"
 quote = "1.0.35"
 syn = "2.0.50"
 css_rules = { path = "./css_rules" }
+lazy_static = "1.4.0"
+rand = "0.8.5"
 [dependencies.uuid]
 version = "1.7.0"
 features = ["v4", "fast-rng", "macro-diagnostics"]

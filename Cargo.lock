@@ -34,17 +34,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dioxuscss"
-version = "0.1.0"
-dependencies = [
- "css_rules",
- "num-traits",
- "quote",
- "syn 2.0.50",
- "uuid",
-]
-
-[[package]]
 name = "getrandom"
 version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -213,6 +202,19 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.50",
+]
+
+[[package]]
+name = "venus-css"
+version = "0.1.0"
+dependencies = [
+ "css_rules",
+ "lazy_static",
+ "num-traits",
+ "quote",
+ "rand",
+ "syn 2.0.50",
+ "uuid",
 ]
 
 [[package]]
