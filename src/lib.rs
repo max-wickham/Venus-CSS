@@ -1,9 +1,9 @@
 #![allow(unused_imports)]
 #![allow(non_snake_case)]
 use lazy_static::lazy_static;
+use rand::Rng;
 use std::collections::HashMap;
 use std::sync::Mutex;
-use rand::Rng;
 
 use css_rules::{
     assert_valid_border, assert_valid_color, assert_valid_dimensions, assert_valid_length,
@@ -12,7 +12,8 @@ use css_rules::{
 
 mod css_passing;
 
-struct GlobalCSS {
+#[doc(hidden)]
+pub struct GlobalCSS {
     pub css_string: String,
 }
 
@@ -23,7 +24,8 @@ impl GlobalCSS {
 }
 
 lazy_static! {
-    static ref GLOBAL_CSS: Mutex<GlobalCSS> = Mutex::new(GlobalCSS {
+    #[doc(hidden)]
+    pub static ref GLOBAL_CSS: Mutex<GlobalCSS> = Mutex::new(GlobalCSS {
         css_string: String::new(),
     });
 }
@@ -31,8 +33,9 @@ lazy_static! {
 //     value: String::new(),
 // };
 
+#[doc(hidden)]
+#[macro_export]
 macro_rules! create_object {
-
     ($key:literal, $hashmap:expr, $value:expr) => {{
         $hashmap.insert($key.to_string(), $value.to_string());
     }};
@@ -44,9 +47,10 @@ macro_rules! create_object {
     ($key:ident, $hashmap:expr, $value:expr) => {{
         $hashmap.insert(stringify!($key).to_string(), $value.to_string());
     }};
-
 }
 
+#[doc(hidden)]
+#[macro_export]
 macro_rules! css_style {
     ($($key:tt : $value:expr),* $(,)?)  => {
         {
@@ -59,7 +63,8 @@ macro_rules! css_style {
     };
 }
 
-fn convert_map_to_css_string(map: HashMap<String, String>) -> String {
+#[doc(hidden)]
+pub fn convert_map_to_css_string(map: HashMap<String, String>) -> String {
     let mut css_string = String::new();
     css_string += "{ \n";
     for (key, value) in map.iter() {
@@ -73,7 +78,8 @@ fn convert_map_to_css_string(map: HashMap<String, String>) -> String {
     css_string
 }
 
-fn generate_css_style_name() -> String {
+#[doc(hidden)]
+pub fn generate_css_style_name() -> String {
     const CHARSET: &[u8] = b"abcdefghijklmnopqrstuvwxyz";
     const LENGTH: usize = 16;
 
@@ -88,33 +94,41 @@ fn generate_css_style_name() -> String {
     String::from("venus-") + &name
 }
 
+#[macro_export]
 macro_rules! css_stylesheet {
     ({} => {}) => {};
 
     ($($key:ident : $value:tt),* $(,)?)  => {
-        {
-            #[derive(Debug)]
-            #[allow(dead_code)]
-            struct Stylesheet {
-                $(
-                    pub $key: String,
-                )*
-            }
-            let result = Stylesheet {
-                $(
-                    $key:  || -> String {
-                        let id = generate_css_style_name();
-                        let css_map = css_style! $value;
-                        GLOBAL_CSS.lock().unwrap().append_value(id.clone() + ": " + &convert_map_to_css_string(css_map) + "\n");
-                        id
-                    }(),
-                )*
-            };
+
+            use venus_css::{css_style, create_object, css_key, GLOBAL_CSS, generate_css_style_name, convert_map_to_css_string};
+            use std::collections::HashMap;
+
+            // #[derive(Debug)]
+            // #[allow(dead_code)]
+            // struct Stylesheet {
+            //     $(
+            //         pub $key: String,
+            //     )*
+            // }
+            // let result = Stylesheet {
+            //     $(
+            //         $key:  || -> String {
+            //             let id = generate_css_style_name();
+            //             let css_map = css_style! $value;
+            //             GLOBAL_CSS.lock().unwrap().append_value(id.clone() + ": " + &convert_map_to_css_string(css_map) + "\n");
+            //             id
+            //         }(),
+            //     )*
+            // };
+            $(static $key = || -> String {
+                    let id = generate_css_style_name();
+                    let css_map = css_style! $value;
+                    GLOBAL_CSS.lock().unwrap().append_value(id.clone() + ": " + &convert_map_to_css_string(css_map) + "\n");
+                    id
+                }();)*
             $(
                 css_style! $value;
             )*
-            result
-        }
     };
 }
 

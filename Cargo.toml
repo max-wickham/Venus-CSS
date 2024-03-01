@@ -1,6 +1,6 @@
 workspace = { members = ["css_rules"] }
 [package]
-name = "venus-css"
+name = "venus_css"
 version = "0.1.0"
 edition = "2021"
 
@@ -18,5 +18,5 @@ version = "1.7.0"
 features = ["v4", "fast-rng", "macro-diagnostics"]
 
 [lib]
-name = "venus-css"
+name = "venus_css"
 path = "src/lib.rs"
