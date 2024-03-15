@@ -15,11 +15,11 @@ lazy_static = "1.4.0"
 rand = "0.8.5"
 const-random = "0.1.17"
 random-string = "1.1.0"
-phf = "0.11.2"
+phf = { version = "0.11.2", features = ["macros"] }
 [dependencies.uuid]
 version = "1.7.0"
 features = ["v4", "fast-rng", "macro-diagnostics"]
 
-[lib]
-name = "venus_css"
-path = "src/lib.rs"
+# [lib]
+# name = "venus_css"
+# path = "src/lib.rs"
