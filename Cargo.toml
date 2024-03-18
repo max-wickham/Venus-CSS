@@ -1,4 +1,4 @@
-workspace = { members = ["css_rules"] }
+workspace = { members = [ "css_file_gen","css_rules"] }
 [package]
 name = "venus_css"
 version = "0.1.0"
@@ -11,14 +11,19 @@ num-traits = "0.2.18"
 quote = "1.0.35"
 syn = "2.0.50"
 css_rules = { path = "./css_rules" }
+css_file_gen = { path = "./css_file_gen" }
 lazy_static = "1.4.0"
 rand = "0.8.5"
 const-random = "0.1.17"
 random-string = "1.1.0"
 phf = { version = "0.11.2", features = ["macros"] }
+proc-macro2 = "1.0.79"
 [dependencies.uuid]
 version = "1.7.0"
 features = ["v4", "fast-rng", "macro-diagnostics"]
+
+[build-dependencies]
+css_file_gen = { path = "./css_file_gen" }
 
 # [lib]
 # name = "venus_css"
